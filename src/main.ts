@@ -12,6 +12,13 @@ async function bootstrap() {
     whitelist: true,
   }));
 
+  // 启用 CORS
+  app.enableCors({
+    origin: '*',
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+  });
+
   // 从配置服务获取端口
   const configService = app.get(ConfigService);
   const port = configService.get('PORT') || 3000;

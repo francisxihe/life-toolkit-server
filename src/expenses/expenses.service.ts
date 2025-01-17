@@ -23,7 +23,6 @@ export class ExpensesService {
   ): Promise<Transaction> {
     const transaction = this.transactionsRepository.create({
       ...createTransactionDto,
-      user,
     });
 
     const savedTransaction = await this.transactionsRepository.save(
@@ -34,7 +33,6 @@ export class ExpensesService {
     if (transaction.type === "expense") {
       const budget = await this.budgetsRepository.findOne({
         where: {
-          user: { id: user.id },
           category: transaction.category,
           startDate: Between(new Date(), transaction.date),
         },
@@ -56,28 +54,23 @@ export class ExpensesService {
   ): Promise<Budget> {
     const budget = this.budgetsRepository.create({
       ...createBudgetDto,
-      user,
     });
     return this.budgetsRepository.save(budget);
   }
 
   async findAllTransactions(user: User): Promise<Transaction[]> {
     return this.transactionsRepository.find({
-      where: { user: { id: user.id } },
       order: { date: "DESC" },
     });
   }
 
   async findAllBudgets(user: User): Promise<Budget[]> {
     return this.budgetsRepository.find({
-      where: { user: { id: user.id } },
     });
   }
 
   async getStats(user: User) {
-    const transactions = await this.transactionsRepository.find({
-      where: { user: { id: user.id } },
-    });
+    const transactions = await this.transactionsRepository.find({});
 
     const totalIncome = transactions
       .filter((t) => t.type === "income")

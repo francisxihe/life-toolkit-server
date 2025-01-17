@@ -30,9 +30,6 @@ export class Transaction {
     interval: number;
   };
 
-  @ManyToOne(() => User, user => user.transactions)
-  user: User;
-
   @CreateDateColumn()
   createdAt: Date;
 

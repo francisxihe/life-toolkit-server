@@ -4,7 +4,7 @@ import { TypeOrmModule } from "@nestjs/typeorm";
 import { getDatabaseConfig } from "./config/database.config";
 // import { UsersModule } from "./users/users.module";
 // import { AuthModule } from "./auth/auth.module";
-// import { TodosModule } from "./todos/todos.module";
+import { TodoModule } from "./todo/todo.module";
 // import { ExpensesModule } from "./expenses/expenses.module";
 import { AiModule } from "./ai/ai.module";
 
@@ -21,7 +21,7 @@ import { AiModule } from "./ai/ai.module";
     // }),
     // UsersModule,
     // AuthModule,
-    // TodosModule,
+    TodoModule,
     // ExpensesModule,
     AiModule,
   ],
