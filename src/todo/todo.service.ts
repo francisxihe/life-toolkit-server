@@ -20,6 +20,8 @@ export class TodoService {
   async create(createTodoDto: CreateTodoDto): Promise<Todo> {
     const todo = this.todoRepository.create({
       ...createTodoDto,
+      status: createTodoDto.status || "todo",
+      tags: createTodoDto.tags || [],
     });
     return this.todoRepository.save(todo);
   }

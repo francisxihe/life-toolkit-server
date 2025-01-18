@@ -45,6 +45,6 @@ export class SubTodo {
   @Column()
   status: "todo" | "done" | "abandoned";
   /** 父待办id */
-  @ManyToOne(() => Todo, (todo) => todo.subTodoList)
+  @Column()
   parentId: string;
 }

@@ -14,11 +14,11 @@ import { AiModule } from "./ai/ai.module";
       isGlobal: true,
       envFilePath: ".env",
     }),
-    // TypeOrmModule.forRootAsync({
-    //   inject: [ConfigService],
-    //   imports: [ConfigModule],
-    //   useFactory: getDatabaseConfig,
-    // }),
+    TypeOrmModule.forRootAsync({
+      inject: [ConfigService],
+      imports: [ConfigModule],
+      useFactory: getDatabaseConfig,
+    }),
     // UsersModule,
     // AuthModule,
     TodoModule,

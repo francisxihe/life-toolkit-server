@@ -72,8 +72,4 @@ export class Todo {
   /** 待办更新时间 */
   @UpdateDateColumn()
   updatedAt: Date;
-
-  /** 子待办列表 */
-  @OneToMany(() => SubTodo, (subTodo: SubTodo) => subTodo.parentId)
-  subTodoList: SubTodo[];
 }
