@@ -15,7 +15,7 @@
 # production
 /build
 
-/life_toolkit
+/dist
 
 # misc
 .DS_Store

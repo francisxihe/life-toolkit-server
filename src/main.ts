@@ -25,7 +25,7 @@ async function bootstrap() {
 
   // 从配置服务获取端口
   const configService = app.get(ConfigService);
-  const port = configService.get("PORT") || 3000;
+  const port = configService.get("PORT");
 
   await app.listen(port);
   console.log("========", process.env.NODE_ENV);
