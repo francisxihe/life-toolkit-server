@@ -10,11 +10,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-- name: Test Network Connectivity
-  run: ping -c 4 ${ECS_IP}
+      - name: Test Network Connectivity
+        run: ping -c 4 ${ECS_IP}
 
-  - name: Test SSH Port
-  run: nc -zv ${ECS_IP} 22
+      - name: Test SSH Port
+        run: nc -zv ${ECS_IP} 22
 
       # 1. 检出代码
       - name: Checkout Code
