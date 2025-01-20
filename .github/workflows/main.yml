@@ -3,55 +3,42 @@ name: Deploy to Alibaba Cloud ECS
 on:
   push:
     branches:
-      - master  # 监听 `master` 分支的推送
+      - master
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. 检出代码
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      # 2. 设置 Node.js 环境
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '21'  # 使用的 Node.js 版本
+          node-version: '21'
 
-      # 3. 安装依赖并构建项目
       - name: Install Dependencies and Build
         run: |
           npm install
-          npm run build  # 如果有构建步骤
+          npm run build
 
-      # 4. 安装 rsync
-      - name: Install rsync
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y sshpass rsync
-          rsync --version
-
-      # 5. 将构建后的文件上传到 ECS 服务器
       - name: Deploy to ECS
+        uses: easingthemes/ssh-deploy@v2.1.5
         env:
-          ECS_USERNAME: ${{ secrets.ECS_USERNAME }}
-          ECS_PASSWORD: ${{ secrets.ECS_PASSWORD }}
-          ECS_IP: ${{ secrets.ECS_IP }}
-        run: |
-          # 使用 sshpass 工具登录并传输文件
-          sudo apt-get update && sudo apt-get install -y sshpass
-          sshpass -p "${ECS_PASSWORD}" rsync -avz --delete -e "ssh -o StrictHostKeyChecking=no" ./dist/ ${ECS_USERNAME}@${ECS_IP}:/root/project/life_toolkit
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          ARGS: "-avz --delete"
+          SOURCE: "dist/"
+          REMOTE_HOST: ${{ secrets.ECS_IP }}
+          REMOTE_USER: ${{ secrets.ECS_USERNAME }}
+          TARGET: "/root/project/life_toolkit"
 
-      # 6. 远程重启服务（如 PM2）
       - name: Restart Application
         env:
           ECS_USERNAME: ${{ secrets.ECS_USERNAME }}
-          ECS_PASSWORD: ${{ secrets.ECS_PASSWORD }}
           ECS_IP: ${{ secrets.ECS_IP }}
         run: |
-          sshpass -p "${ECS_PASSWORD}" ssh -o StrictHostKeyChecking=no ${ECS_USERNAME}@${ECS_IP} << 'EOF'
+          ssh -o StrictHostKeyChecking=no ${ECS_USERNAME}@${ECS_IP} << 'EOF'
           cd /root/project/life_toolkit
           pm2 reload all
           EOF
