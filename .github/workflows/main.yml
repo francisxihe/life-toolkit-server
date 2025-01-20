@@ -30,7 +30,8 @@ jobs:
       - name: Install rsync
         run: |
           sudo apt-get update
-          sudo apt-get install -y rsync
+          sudo apt-get install -y sshpass rsync
+          rsync --version
 
       # 5. 将构建后的文件上传到 ECS 服务器
       - name: Deploy to ECS
