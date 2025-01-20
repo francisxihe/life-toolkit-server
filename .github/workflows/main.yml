@@ -11,6 +11,9 @@ jobs:
 
     steps:
       - name: Test Network Connectivity
+        run: ping -c 4 www.google.com
+        
+      - name: Test Network Connectivity
         run: ping -c 4 112.124.21.126
 
       - name: Test SSH Port
