@@ -11,10 +11,10 @@ jobs:
 
     steps:
       - name: Test Network Connectivity
-        run: ping -c 4 ${ECS_IP}
+        run: ping -c 4 112.124.21.126
 
       - name: Test SSH Port
-        run: nc -zv ${ECS_IP} 22
+        run: nc -zv 112.124.21.126 22
 
       # 1. 检出代码
       - name: Checkout Code
