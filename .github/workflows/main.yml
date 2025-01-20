@@ -29,8 +29,8 @@ jobs:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
           ARGS: "-avz --delete"
           SOURCE: "dist/"
-          REMOTE_HOST: 112.124.21.126
-          REMOTE_USER: root
+          REMOTE_HOST: ${{ secrets.ECS_IP }}
+          REMOTE_USER: ${{ secrets.ECS_USERNAME }}
           TARGET: "/root/project/life_toolkit"
 
       - name: Restart Application
