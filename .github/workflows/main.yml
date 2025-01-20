@@ -35,7 +35,7 @@ jobs:
         run: |
           # 使用 sshpass 工具登录并传输文件
           sudo apt-get update && sudo apt-get install -y sshpass
-          sshpass -p "${ECS_PASSWORD}" rsync -avz --delete ./dist/ ${ECS_USERNAME}@112.124.21.126:/root/project/life_toolkit
+          sshpass -p "${ECS_PASSWORD}" rsync -avz --delete -e "ssh -o StrictHostKeyChecking=no" ./dist/ ${ECS_USERNAME}@${ECS_IP}:/root/project/life_toolkit
 
       # 5. 远程重启服务（如 PM2）
       - name: Restart Application
@@ -44,7 +44,7 @@ jobs:
           ECS_PASSWORD: ${{ secrets.ECS_PASSWORD }}
           ECS_IP: ${{ secrets.ECS_IP }}
         run: |
-          sshpass -p "${ECS_PASSWORD}" ssh -o StrictHostKeyChecking=no ${ECS_USERNAME}@112.124.21.126 << 'EOF'
+          sshpass -p "${ECS_PASSWORD}" ssh -o StrictHostKeyChecking=no ${ECS_USERNAME}@${ECS_IP} << 'EOF'
           cd /root/project/life_toolkit
           pm2 reload all
           EOF
