@@ -26,7 +26,11 @@ jobs:
           npm install
           npm run build  # 如果有构建步骤
 
-      # 4. 将构建后的文件上传到 ECS 服务器
+      # 4. 安装 rsync
+      - name: Install rsync
+        run: sudo apt-get install -y rsync
+
+      # 5. 将构建后的文件上传到 ECS 服务器
       - name: Deploy to ECS
         env:
           ECS_USERNAME: ${{ secrets.ECS_USERNAME }}
@@ -37,7 +41,7 @@ jobs:
           sudo apt-get update && sudo apt-get install -y sshpass
           sshpass -p "${ECS_PASSWORD}" rsync -avz --delete -e "ssh -o StrictHostKeyChecking=no" ./dist/ ${ECS_USERNAME}@${ECS_IP}:/root/project/life_toolkit
 
-      # 5. 远程重启服务（如 PM2）
+      # 6. 远程重启服务（如 PM2）
       - name: Restart Application
         env:
           ECS_USERNAME: ${{ secrets.ECS_USERNAME }}
