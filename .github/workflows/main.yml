@@ -11,9 +11,6 @@ jobs:
 
     steps:
       - name: Test Network Connectivity
-        run: ping -c 4 www.github.com
-
-      - name: Test Network Connectivity
         run: curl -I https://www.github.com
 
       - name: Test SSH Port
