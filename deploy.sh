@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # 定义变量
-LOCAL_DIR="./dist"
-REMOTE_DIR="/root/project/life_toolkit"
+LOCAL_DIR="./life_toolkit"
+REMOTE_DIR="/root/project"
 ECS_USERNAME="root"
 ECS_IP="112.124.21.126"
 

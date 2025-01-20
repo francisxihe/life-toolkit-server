@@ -5,7 +5,7 @@
   "private": true,
   "scripts": {
     "build": "nest build",
-    "start": "node dist/main.js",
+    "start": "node life_toolkit/main.js",
     "start:dev": "cross-env NODE_ENV=development nest start --watch",
     "start:debug": "cross-env NODE_ENV=production nest start --debug --watch",
     "start:prod": "cross-env NODE_ENV=production nest start --watch"
