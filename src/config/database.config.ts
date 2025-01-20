@@ -1,6 +1,5 @@
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { ConfigService } from '@nestjs/config';
-import { env } from 'process';
 
 export const getDatabaseConfig = (
   configService: ConfigService,
