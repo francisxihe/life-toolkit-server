@@ -1,6 +1,15 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Repository, In, FindOperator } from "typeorm";
+import {
+  Repository,
+  In,
+  FindOperator,
+  FindOptionsWhere,
+  Between,
+  MoreThan,
+  LessThan,
+  Like,
+} from "typeorm";
 import { Todo } from "./entities/todo.entity";
 import { CreateTodoDto } from "./dto/create-todo.dto";
 import { UpdateTodoDto } from "./dto/update-todo.dto";
@@ -32,10 +41,79 @@ export class TodoService extends BaseService<Todo> {
   async findAll(
     filter: TodoPageFilterDto & { id?: FindOperator<string> }
   ): Promise<Todo[]> {
-    return this.todoRepository.find({
+    const where: FindOptionsWhere<Todo> = {};
+    if (filter.planDateStart && filter.planDateEnd) {
+      where.planDate = Between(
+        new Date(filter.planDateStart),
+        new Date(filter.planDateEnd)
+      );
+    } else if (filter.planDateStart) {
+      where.planDate = MoreThan(new Date(filter.planDateStart));
+    } else if (filter.planDateEnd) {
+      where.planDate = LessThan(new Date(filter.planDateEnd));
+    }
+
+    if (filter.doneDateStart && filter.doneDateEnd) {
+      where.doneAt = Between(
+        new Date(filter.doneDateStart),
+        new Date(filter.doneDateEnd)
+      );
+    } else if (filter.doneDateStart) {
+      where.doneAt = MoreThan(new Date(filter.doneDateStart));
+    } else if (filter.doneDateEnd) {
+      where.doneAt = LessThan(new Date(filter.doneDateEnd));
+    }
+
+    if (filter.abandonedDateStart && filter.abandonedDateEnd) {
+      where.abandonedAt = Between(
+        new Date(filter.abandonedDateStart),
+        new Date(filter.abandonedDateEnd)
+      );
+    } else if (filter.abandonedDateStart) {
+      where.abandonedAt = MoreThan(new Date(filter.abandonedDateStart));
+    } else if (filter.abandonedDateEnd) {
+      where.abandonedAt = LessThan(new Date(filter.abandonedDateEnd));
+    }
+
+    if (filter.keyword) {
+      where.name = Like(`%${filter.keyword}%`);
+    }
+
+    if (filter.status) {
+      where.status = filter.status;
+    }
+
+    if (filter.importance) {
+      where.importance = filter.importance;
+    }
+
+    if (filter.urgency) {
+      where.urgency = filter.urgency;
+    }
+
+    const todoList = await this.todoRepository.find({
       order: { createdAt: "DESC" },
-      where: filter,
+      where,
     });
+
+    return todoList;
+  }
+
+  async page(filter: TodoPageFilterDto): Promise<{
+    data: Todo[];
+    total: number;
+    page: number;
+    pageSize: number;
+  }> {
+    const where: FindOptionsWhere<Todo> = {};
+    const todoList = await this.findAll(filter);
+    const total = await this.todoRepository.count({ where });
+    return {
+      data: todoList,
+      total,
+      page: 1,
+      pageSize: 10,
+    };
   }
 
   async update(id: string, updateTodoDto: UpdateTodoDto): Promise<Todo> {
@@ -44,7 +122,7 @@ export class TodoService extends BaseService<Todo> {
     return this.todoRepository.save(todo);
   }
 
-  async batchDone(idList: string[]): Promise<ResponseDto<Todo[]>> {
+  async batchDone(idList: string[]): Promise<Todo[]> {
     const todoList = await this.findAll({
       id: In(idList),
     });
@@ -53,31 +131,22 @@ export class TodoService extends BaseService<Todo> {
       todo.doneAt = new Date();
     });
     await this.todoRepository.save(todoList);
-    return ResponseDto.success({
-      message: "批量完成成功",
-      data: todoList,
-    });
+    return todoList;
   }
 
-  async abandon(id: string): Promise<ResponseDto<Todo>> {
+  async abandon(id: string): Promise<Todo> {
     const todo = await this.findById(id);
     todo.status = "abandoned";
     await this.todoRepository.save(todo);
-    return ResponseDto.success({
-      message: "放弃成功",
-      data: todo,
-    });
+    return todo;
   }
 
-  async restore(id: string): Promise<ResponseDto<Todo>> {
+  async restore(id: string): Promise<Todo> {
     const todo = await this.findById(id);
     todo.status = "todo";
     todo.doneAt = null;
     todo.abandonedAt = null;
     await this.todoRepository.save(todo);
-    return ResponseDto.success({
-      message: "恢复成功",
-      data: todo,
-    });
+    return todo;
   }
 }

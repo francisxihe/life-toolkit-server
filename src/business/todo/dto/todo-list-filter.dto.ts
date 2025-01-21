@@ -6,13 +6,8 @@ import {
   IsNumber,
   IsEnum,
 } from "class-validator";
-import { PageDto } from "@/base/page.dto";
 
-export class TodoPageFilterDto extends PageDto {
-  @IsOptional()
-  @IsString()
-  keyword?: string;
-
+export class TodoListFilterDto {
   @IsOptional()
   @IsDateString()
   planDateStart?: string;

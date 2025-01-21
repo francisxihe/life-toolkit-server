@@ -13,12 +13,15 @@ export class BaseTodoEntity extends BaseEntity {
   /** 待办描述 */
   @Column({ nullable: true })
   description?: string;
+  
   /** 待办重要程度 */
   @Column({ nullable: true })
   importance?: number;
+  
   /** 待办紧急程度 */
   @Column({ nullable: true })
   urgency?: number;
+  
   /** 待办标签 */
   @Column("simple-array")
   tags: string[];
@@ -38,6 +41,7 @@ export class BaseTodoEntity extends BaseEntity {
   /** 计划待办开始时间 */
   @Column("time", { nullable: true })
   planStartAt?: string;
+  
   /** 计划待办结束时间 */
   @Column("time", { nullable: true })
   planEndAt?: string;

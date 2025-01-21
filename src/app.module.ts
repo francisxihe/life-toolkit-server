@@ -1,6 +1,5 @@
 import { Module } from "@nestjs/common";
 import { APP_INTERCEPTOR } from "@nestjs/core";
-import { ResponseInterceptor } from "./interceptor/response";
 import { ConfigModule, ConfigService } from "@nestjs/config";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { getDatabaseConfig } from "./config/database.config";
@@ -31,12 +30,7 @@ import { AiModule } from "./business/ai/ai.module";
     AiModule,
   ],
   controllers: [],
-  providers: [
-    {
-      provide: APP_INTERCEPTOR,
-      useClass: ResponseInterceptor,
-    },
-  ],
+  providers: [],
 })
 export class AppModule {
   constructor() {

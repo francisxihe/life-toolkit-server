@@ -19,27 +19,15 @@ export class ResponseDto<T> {
   data: T | null;
   code: number;
 
-  static success<T>({
-    message,
-    data,
-  }: {
-    message: string;
-    data: T;
-  }) {
+  static success<T>({ data }: { data: T }) {
     return createResponse<T>({
       code: 200,
-      message,
+      message: "SUCCESS",
       data,
     });
   }
 
-  static error({
-    message,
-    code,
-  }: {
-    message: string;
-    code: number;
-  }) {
+  static error({ message, code }: { message: string; code: number }) {
     return createResponse<null>({
       code,
       message,
@@ -58,13 +46,17 @@ export class PaginationResponseDto<T> {
   } | null;
   code: number;
 
-  static success<T>(
-    message: string,
-    data: T[],
-    total: number,
-    page: number,
-    pageSize: number
-  ) {
+  static success<T>({
+    data,
+    total,
+    page,
+    pageSize,
+  }: {
+    data: T[];
+    total: number;
+    page: number;
+    pageSize: number;
+  }) {
     return createResponse<{
       records: T[];
       total: number;
@@ -72,7 +64,7 @@ export class PaginationResponseDto<T> {
       pageSize: number;
     }>({
       code: 200,
-      message,
+      message: "SUCCESS",
       data: {
         records: data,
         total,
@@ -82,13 +74,7 @@ export class PaginationResponseDto<T> {
     });
   }
 
-  static error({
-    message,
-    code,
-  }: {
-    message: string;
-    code: number;
-  }) {
+  static error({ message, code }: { message: string; code: number }) {
     return createResponse<null>({
       code,
       message,

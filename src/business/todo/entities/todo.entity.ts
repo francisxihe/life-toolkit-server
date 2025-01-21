@@ -4,8 +4,8 @@ import { BaseTodoEntity } from "./base.entity";
 @Entity("todo")
 export class Todo extends BaseTodoEntity {
   /** 计划待办日期 */
-  @Column()
-  planDate: string;
+  @Column({ type: 'timestamp' })
+  planDate: Date;
 
   /** 待办是否是重复待办 */
   @Column({ nullable: true })
