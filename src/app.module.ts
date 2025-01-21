@@ -31,4 +31,8 @@ import { AiModule } from "./ai/ai.module";
   controllers: [],
   providers: [],
 })
-export class AppModule {}
+export class AppModule {
+  constructor() {
+    console.log(process.env);
+  }
+}

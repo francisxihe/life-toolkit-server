@@ -7,12 +7,10 @@ import {
   OneToMany,
 } from "typeorm";
 import { SubTodo } from "./sub-todo.entity";
+import { BaseEntity } from "@/base/base.entity";
 
 @Entity()
-export class Todo {
-  @PrimaryGeneratedColumn("uuid")
-  id: string;
-
+export class Todo extends BaseEntity {
   /** 待办名称 */
   @Column()
   name: string;
@@ -64,12 +62,4 @@ export class Todo {
   /** 待办重复间隔 */
   @Column({ nullable: true })
   recurrenceInterval: string;
-
-  /** 待办创建时间 */
-  @CreateDateColumn()
-  createdAt: Date;
-
-  /** 待办更新时间 */
-  @UpdateDateColumn()
-  updatedAt: Date;
 }

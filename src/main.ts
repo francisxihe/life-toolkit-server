@@ -4,7 +4,6 @@ import { ValidationPipe } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 
 async function bootstrap() {
-
   const app = await NestFactory.create(AppModule);
 
   // 启用全局验证管道
@@ -17,10 +16,10 @@ async function bootstrap() {
 
   // 启用 CORS
   app.enableCors({
-    origin: ["http://localhost:3000"],
+    origin: true, // 允许所有来源
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
-    credentials: true,
+    // credentials: true,
   });
 
   // 从配置服务获取端口

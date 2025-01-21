@@ -5,12 +5,10 @@ import {
   ManyToOne,
   CreateDateColumn,
 } from "typeorm";
-import { Todo } from "./todo.entity";
+import { BaseEntity } from "@/base/base.entity";
 
 @Entity()
-export class SubTodo {
-  @PrimaryGeneratedColumn("uuid")
-  id: string;
+export class SubTodo extends BaseEntity {
   /** 待办名称 */
   @Column()
   name: string;
@@ -35,9 +33,6 @@ export class SubTodo {
   /** 计划待办结束时间 */
   @Column({ nullable: true })
   planEndAt?: string;
-  /** 待办创建时间 */
-  @CreateDateColumn()
-  createdAt: Date;
   /** 放弃待办时间 */
   @Column({ nullable: true })
   abandonedAt?: string;

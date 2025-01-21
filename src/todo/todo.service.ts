@@ -7,15 +7,18 @@ import { UpdateTodoDto } from "./dto/update-todo.dto";
 import { SubTodo } from "./entities/sub-todo.entity";
 import { CreateSubTodoDto } from "./dto/create-sub-todo.dto";
 import { UpdateSubTodoDto } from "./dto/update-sub-todo.dto";
+import { BaseService } from "../base/base.service";
 
 @Injectable()
-export class TodoService {
+export class TodoService extends BaseService<Todo> {
   constructor(
     @InjectRepository(Todo)
     private todoRepository: Repository<Todo>,
     @InjectRepository(SubTodo)
     private subTodoRepository: Repository<SubTodo>
-  ) {}
+  ) {
+    super(todoRepository);
+  }
 
   async create(createTodoDto: CreateTodoDto): Promise<Todo> {
     const todo = this.todoRepository.create({
@@ -32,29 +35,14 @@ export class TodoService {
     });
   }
 
-  async findOne(id: string): Promise<Todo> {
-    const todo = await this.todoRepository.findOne({
-      where: { id },
-    });
-    if (!todo) {
-      throw new NotFoundException(`Todo #${id} not found`);
-    }
-    return todo;
-  }
-
   async update(id: string, updateTodoDto: UpdateTodoDto): Promise<Todo> {
-    const todo = await this.findOne(id);
+    const todo = await this.findById(id);
     Object.assign(todo, updateTodoDto);
     return this.todoRepository.save(todo);
   }
 
-  async remove(id: string): Promise<void> {
-    const todo = await this.findOne(id);
-    await this.todoRepository.remove(todo);
-  }
-
   async toggleComplete(id: string): Promise<Todo> {
-    const todo = await this.findOne(id);
+    const todo = await this.findById(id);
     todo.status = todo.status === "todo" ? "done" : "todo";
     return this.todoRepository.save(todo);
   }
