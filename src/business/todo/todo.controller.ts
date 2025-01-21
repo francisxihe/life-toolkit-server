@@ -6,11 +6,13 @@ import {
   Param,
   Delete,
   Put,
+  Query,
 } from "@nestjs/common";
 import { TodoService } from "./todo.service";
 import { CreateTodoDto } from "./dto/create-todo.dto";
 import { UpdateTodoDto } from "./dto/update-todo.dto";
 import { CreateSubTodoDto } from "./dto/create-sub-todo.dto";
+import { TodoPageFilterDto } from "./dto/todo-page-filter.dto";
 
 @Controller("todo")
 export class TodoController {
@@ -24,8 +26,8 @@ export class TodoController {
 
   /** 获取todo列表 */
   @Get("list")
-  list() {
-    return this.todoService.findAll();
+  list(@Query() filter: TodoPageFilterDto) {
+    return this.todoService.findAll(filter);
   }
 
   /** 获取todo详情 */
@@ -43,19 +45,19 @@ export class TodoController {
   /** 批量完成todo */
   @Put("batchDone")
   batchDone(@Body() idList: string[]) {
-    return this.todoService.findAll();
+    return this.todoService.batchDone(idList);
   }
 
   /** 放弃todo */
   @Put("abandon/:id")
   abandon(@Param("id") id: string) {
-    return this.todoService.findAll();
+    return this.todoService.abandon(id);
   }
 
   /** 恢复todo */
   @Put("restore/:id")
   restore(@Param("id") id: string) {
-    return this.todoService.findAll();
+    return this.todoService.restore(id);
   }
 
   /** 删除todo */
@@ -67,19 +69,13 @@ export class TodoController {
   /** 获取todo树 */
   @Get("tree")
   todoTree() {
-    return this.todoService.findAll();
+    // return this.todoService.findAll();
   }
 
   /** 获取todo及其子todo */
   @Get("node/:id")
   todoWithSub(@Param("id") id: string) {
-    return this.todoService.findAll();
-  }
-
-  /** 添加子todo */
-  @Post("addSubTodo")
-  createSubTodo(@Body() createSubTodoDto: CreateSubTodoDto) {
-    return this.todoService.findAll();
+    return this.todoService.findById(id);
   }
 
   // getTodoSubTodoIdList

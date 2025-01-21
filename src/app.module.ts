@@ -1,12 +1,14 @@
 import { Module } from "@nestjs/common";
+import { APP_INTERCEPTOR } from "@nestjs/core";
+import { ResponseInterceptor } from "./interceptor/response";
 import { ConfigModule, ConfigService } from "@nestjs/config";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { getDatabaseConfig } from "./config/database.config";
 // import { UsersModule } from "./users/users.module";
 // import { AuthModule } from "./auth/auth.module";
-import { TodoModule } from "./todo/todo.module";
+import { TodoModule } from "./business/todo/todo.module";
 // import { ExpensesModule } from "./expenses/expenses.module";
-import { AiModule } from "./ai/ai.module";
+import { AiModule } from "./business/ai/ai.module";
 
 @Module({
   imports: [
@@ -29,7 +31,12 @@ import { AiModule } from "./ai/ai.module";
     AiModule,
   ],
   controllers: [],
-  providers: [],
+  providers: [
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: ResponseInterceptor,
+    },
+  ],
 })
 export class AppModule {
   constructor() {

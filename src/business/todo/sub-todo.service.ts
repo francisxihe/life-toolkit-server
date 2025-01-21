@@ -4,7 +4,7 @@ import { Repository } from "typeorm";
 import { SubTodo } from "./entities/sub-todo.entity";
 import { CreateSubTodoDto } from "./dto/create-sub-todo.dto";
 import { UpdateSubTodoDto } from "./dto/update-sub-todo.dto";
-import { BaseService } from "../base/base.service";
+import { BaseService } from "../../base/base.service";
 
 @Injectable()
 export class SubTodoService extends BaseService<SubTodo> {

@@ -1,17 +1,15 @@
-import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  ManyToOne,
-  CreateDateColumn,
-} from "typeorm";
+import { Column } from "typeorm";
 import { BaseEntity } from "@/base/base.entity";
 
-@Entity()
-export class SubTodo extends BaseEntity {
+export class BaseTodoEntity extends BaseEntity {
   /** 待办名称 */
   @Column()
   name: string;
+
+  /** 待办状态 */
+  @Column()
+  status: "todo" | "done" | "abandoned";
+
   /** 待办描述 */
   @Column({ nullable: true })
   description?: string;
@@ -24,22 +22,23 @@ export class SubTodo extends BaseEntity {
   /** 待办标签 */
   @Column("simple-array")
   tags: string[];
+
   /** 待办完成时间 */
-  @Column({ nullable: true })
-  doneAt?: string;
+  @Column("datetime", {
+    nullable: true,
+  })
+  doneAt: Date | null;
+
+  /** 放弃待办时间 */
+  @Column("datetime", {
+    nullable: true,
+  })
+  abandonedAt: Date | null;
+
   /** 计划待办开始时间 */
-  @Column({ nullable: true })
+  @Column("time", { nullable: true })
   planStartAt?: string;
   /** 计划待办结束时间 */
-  @Column({ nullable: true })
+  @Column("time", { nullable: true })
   planEndAt?: string;
-  /** 放弃待办时间 */
-  @Column({ nullable: true })
-  abandonedAt?: string;
-  /** 待办状态 */
-  @Column()
-  status: "todo" | "done" | "abandoned";
-  /** 父待办id */
-  @Column()
-  parentId: string;
 }

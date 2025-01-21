@@ -11,7 +11,7 @@ import {
   import { CreateSubTodoDto } from "./dto/create-sub-todo.dto";
   import { UpdateSubTodoDto } from "./dto/update-sub-todo.dto";
   
-  @Controller("subTodo")
+  @Controller("sub-todo")
   export class SubTodoController {
     constructor(private readonly subTodoService: SubTodoService) {}
   

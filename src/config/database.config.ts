@@ -10,7 +10,9 @@ export const getDatabaseConfig = (
   username: configService.get('DB_USERNAME'),
   password: configService.get('DB_PASSWORD'),
   database: configService.get('DB_DATABASE'),
-  entities: ['dist/**/todo.entity{.ts,.js}'],
+  entities: ['dist/**/*.entity{.ts,.js}'],
   synchronize: configService.get('NODE_ENV') === 'development',
   logging: configService.get('NODE_ENV') === 'development',
+  timezone: '+08:00',
+  dateStrings: true
 }); 
