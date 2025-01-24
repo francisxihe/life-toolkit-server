@@ -23,6 +23,7 @@ export class TodoController {
   @Post("create")
   @Response()
   create(@Body() createTodoDto: CreateTodoDto) {
+    console.log("===", createTodoDto);
     return this.todoService.create(createTodoDto);
   }
 

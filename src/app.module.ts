@@ -33,7 +33,5 @@ import { AiModule } from "./business/ai/ai.module";
   providers: [],
 })
 export class AppModule {
-  constructor() {
-    console.log(process.env);
-  }
+  constructor() {}
 }

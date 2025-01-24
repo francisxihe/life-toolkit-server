@@ -22,9 +22,9 @@ import { ResponseDto, PaginationResponseDto } from "../../helpers/response";
 export class TodoService extends BaseService<Todo> {
   constructor(
     @InjectRepository(Todo)
-    private todoRepository: Repository<Todo>,
+    protected todoRepository: Repository<Todo>,
     @InjectRepository(SubTodo)
-    private subTodoRepository: Repository<SubTodo>
+    protected subTodoRepository: Repository<SubTodo>
   ) {
     super(todoRepository);
   }
@@ -44,35 +44,39 @@ export class TodoService extends BaseService<Todo> {
     const where: FindOptionsWhere<Todo> = {};
     if (filter.planDateStart && filter.planDateEnd) {
       where.planDate = Between(
-        new Date(filter.planDateStart),
-        new Date(filter.planDateEnd)
+        new Date(filter.planDateStart + "T00:00:00"),
+        new Date(filter.planDateEnd + "T23:59:59")
       );
     } else if (filter.planDateStart) {
-      where.planDate = MoreThan(new Date(filter.planDateStart));
+      where.planDate = MoreThan(new Date(filter.planDateStart + "T00:00:00"));
     } else if (filter.planDateEnd) {
-      where.planDate = LessThan(new Date(filter.planDateEnd));
+      where.planDate = LessThan(new Date(filter.planDateEnd + "T23:59:59"));
     }
 
     if (filter.doneDateStart && filter.doneDateEnd) {
       where.doneAt = Between(
-        new Date(filter.doneDateStart),
-        new Date(filter.doneDateEnd)
+        new Date(filter.doneDateStart + "T00:00:00"),
+        new Date(filter.doneDateEnd + "T23:59:59")
       );
     } else if (filter.doneDateStart) {
-      where.doneAt = MoreThan(new Date(filter.doneDateStart));
+      where.doneAt = MoreThan(new Date(filter.doneDateStart + "T00:00:00"));
     } else if (filter.doneDateEnd) {
-      where.doneAt = LessThan(new Date(filter.doneDateEnd));
+      where.doneAt = LessThan(new Date(filter.doneDateEnd + "T23:59:59"));
     }
 
     if (filter.abandonedDateStart && filter.abandonedDateEnd) {
       where.abandonedAt = Between(
-        new Date(filter.abandonedDateStart),
-        new Date(filter.abandonedDateEnd)
+        new Date(filter.abandonedDateStart + "T00:00:00"),
+        new Date(filter.abandonedDateEnd + "T23:59:59")
       );
     } else if (filter.abandonedDateStart) {
-      where.abandonedAt = MoreThan(new Date(filter.abandonedDateStart));
+      where.abandonedAt = MoreThan(
+        new Date(filter.abandonedDateStart + "T00:00:00")
+      );
     } else if (filter.abandonedDateEnd) {
-      where.abandonedAt = LessThan(new Date(filter.abandonedDateEnd));
+      where.abandonedAt = LessThan(
+        new Date(filter.abandonedDateEnd + "T23:59:59")
+      );
     }
 
     if (filter.keyword) {
@@ -137,6 +141,7 @@ export class TodoService extends BaseService<Todo> {
   async abandon(id: string): Promise<Todo> {
     const todo = await this.findById(id);
     todo.status = "abandoned";
+    todo.abandonedAt = new Date();
     await this.todoRepository.save(todo);
     return todo;
   }

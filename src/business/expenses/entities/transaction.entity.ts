@@ -25,7 +25,7 @@ export class Transaction {
   date: Date;
 
   @Column('json', { nullable: true })
-  recurring: {
+  repeat: {
     frequency: 'daily' | 'weekly' | 'monthly' | 'yearly';
     interval: number;
   };

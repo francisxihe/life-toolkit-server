@@ -5,7 +5,7 @@ import {
   IsEnum,
   IsArray,
   IsNumber,
-  IsDateString,
+  IsISO8601,
 } from "class-validator";
 
 export class CreateTodoDto {
@@ -33,7 +33,7 @@ export class CreateTodoDto {
   @IsOptional()
   urgency?: number;
 
-  @IsDateString()
+  @IsISO8601()
   planDate: string;
 
   @IsArray()
@@ -43,5 +43,5 @@ export class CreateTodoDto {
 
   @IsString()
   @IsOptional()
-  recurring?: Todo["recurring"];
+  repeat?: Todo["repeat"];
 }
