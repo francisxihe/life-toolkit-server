@@ -3,7 +3,7 @@ import { IsOptional, IsNumber } from "class-validator";
 export class PageDto {
   @IsOptional()
   @IsNumber()
-  pageNumber?: number;
+  pageNum?: number;
 
   @IsOptional()
   @IsNumber()

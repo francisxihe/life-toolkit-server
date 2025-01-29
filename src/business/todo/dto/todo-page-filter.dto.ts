@@ -48,4 +48,12 @@ export class TodoPageFilterDto extends PageDto {
   @IsOptional()
   @IsDateString()
   abandonedDateEnd?: string;
+
+  @IsOptional()
+  @IsNumber()
+  pageNum?: number | undefined;
+
+  @IsOptional()
+  @IsNumber()
+  pageSize?: number | undefined;
 }

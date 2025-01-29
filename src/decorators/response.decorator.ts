@@ -49,9 +49,9 @@ export function PageResponse(data: any) {
 
         // 否则包装成功响应
         return PaginationResponseDto.success({
-          data: result.records,
+          records: result.records,
           total: result.total,
-          page: result.page,
+          pageNum: result.pageNum,
           pageSize: result.pageSize,
         });
       } catch (error) {
