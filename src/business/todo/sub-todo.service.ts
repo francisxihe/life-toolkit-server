@@ -38,10 +38,4 @@ export class SubTodoService extends BaseService<SubTodo> {
     Object.assign(subTodo, updateSubTodoDto);
     return this.subTodoRepository.save(subTodo);
   }
-
-  async toggleComplete(id: string): Promise<SubTodo> {
-    const subTodo = await this.findById(id);
-    subTodo.status = subTodo.status === "todo" ? "done" : "todo";
-    return this.subTodoRepository.save(subTodo);
-  }
 }

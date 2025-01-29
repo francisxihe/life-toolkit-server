@@ -14,10 +14,45 @@ import { UpdateTodoDto } from "./dto/update-todo.dto";
 import { TodoPageFilterDto } from "./dto/todo-page-filter.dto";
 import { TodoListFilterDto } from "./dto/todo-list-filter.dto";
 import { Response } from "@/decorators/response.decorator";
-
+import { TodoStatusService } from "./todo-status.service";
 @Controller("todo")
 export class TodoController {
-  constructor(private readonly todoService: TodoService) {}
+  constructor(
+    private readonly todoService: TodoService,
+    private readonly todoStatusService: TodoStatusService
+  ) {}
+
+  /** 批量完成todo */
+  @Put("batchDone")
+  @Response()
+  batchDone(@Body() idList: string[]) {
+    return this.todoStatusService.batchDone(idList);
+  }
+
+  /** 放弃todo */
+  @Put("abandon/:id")
+  @Response()
+  abandon(@Param("id") id: string) {
+    return this.todoStatusService.abandon(id);
+  }
+
+  /** 恢复todo */
+  @Put("restore/:id")
+  @Response()
+  restore(@Param("id") id: string) {
+    return this.todoStatusService.restore(id);
+  }
+
+  /** 获取todo及其子todo */
+  @Get("todoWithSub/:id")
+  @Response()
+  todoWithSub(@Param("id") id: string) {
+    return this.todoService.todoWithSub(id);
+  }
+
+  // getTodoSubTodoIdList
+
+  // getSubTodoList
 
   /** 创建todo */
   @Post("create")
@@ -25,6 +60,20 @@ export class TodoController {
   create(@Body() createTodoDto: CreateTodoDto) {
     console.log("===", createTodoDto);
     return this.todoService.create(createTodoDto);
+  }
+
+  /** 删除todo */
+  @Delete("delete/:id")
+  @Response()
+  delete(@Param("id") id: string) {
+    return this.todoService.delete(id);
+  }
+
+  /** 更新todo */
+  @Put("update/:id")
+  @Response()
+  update(@Param("id") id: string, @Body() updateTodoDto: UpdateTodoDto) {
+    return this.todoService.update(id, updateTodoDto);
   }
 
   /** 获取todo列表 */
@@ -47,57 +96,4 @@ export class TodoController {
   findById(@Param("id") id: string) {
     return this.todoService.findById(id);
   }
-
-  /** 更新todo */
-  @Put("update/:id")
-  @Response()
-  update(@Param("id") id: string, @Body() updateTodoDto: UpdateTodoDto) {
-    return this.todoService.update(id, updateTodoDto);
-  }
-
-  /** 批量完成todo */
-  @Put("batchDone")
-  @Response()
-  batchDone(@Body() idList: string[]) {
-    return this.todoService.batchDone(idList);
-  }
-
-  /** 放弃todo */
-  @Put("abandon/:id")
-  @Response()
-  abandon(@Param("id") id: string) {
-    return this.todoService.abandon(id);
-  }
-
-  /** 恢复todo */
-  @Put("restore/:id")
-  @Response()
-  restore(@Param("id") id: string) {
-    return this.todoService.restore(id);
-  }
-
-  /** 删除todo */
-  @Delete("delete/:id")
-  @Response()
-  delete(@Param("id") id: string) {
-    return this.todoService.delete(id);
-  }
-
-  /** 获取todo树 */
-  @Get("tree")
-  @Response()
-  todoTree() {
-    // return this.todoService.findAll();
-  }
-
-  /** 获取todo及其子todo */
-  @Get("node/:id")
-  @Response()
-  todoWithSub(@Param("id") id: string) {
-    return this.todoService.findById(id);
-  }
-
-  // getTodoSubTodoIdList
-
-  // getSubTodoList
 }

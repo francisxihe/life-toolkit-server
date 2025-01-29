@@ -52,7 +52,6 @@ export class TodoService extends BaseService<Todo> {
     } else if (filter.planDateEnd) {
       where.planDate = LessThan(new Date(filter.planDateEnd + "T23:59:59"));
     }
-
     if (filter.doneDateStart && filter.doneDateEnd) {
       where.doneAt = Between(
         new Date(filter.doneDateStart + "T00:00:00"),
@@ -78,28 +77,22 @@ export class TodoService extends BaseService<Todo> {
         new Date(filter.abandonedDateEnd + "T23:59:59")
       );
     }
-
     if (filter.keyword) {
       where.name = Like(`%${filter.keyword}%`);
     }
-
     if (filter.status) {
       where.status = filter.status;
     }
-
     if (filter.importance) {
       where.importance = filter.importance;
     }
-
     if (filter.urgency) {
       where.urgency = filter.urgency;
     }
-
     const todoList = await this.todoRepository.find({
       order: { createdAt: "DESC" },
       where,
     });
-
     return todoList;
   }
 
@@ -126,32 +119,23 @@ export class TodoService extends BaseService<Todo> {
     return this.todoRepository.save(todo);
   }
 
-  async batchDone(idList: string[]): Promise<Todo[]> {
-    const todoList = await this.findAll({
-      id: In(idList),
-    });
-    todoList.forEach((todo) => {
-      todo.status = "done";
-      todo.doneAt = new Date();
-    });
-    await this.todoRepository.save(todoList);
-    return todoList;
-  }
-
-  async abandon(id: string): Promise<Todo> {
+  async todoWithSub(id: string): Promise<Todo> {
     const todo = await this.findById(id);
-    todo.status = "abandoned";
-    todo.abandonedAt = new Date();
-    await this.todoRepository.save(todo);
-    return todo;
-  }
 
-  async restore(id: string): Promise<Todo> {
-    const todo = await this.findById(id);
-    todo.status = "todo";
-    todo.doneAt = null;
-    todo.abandonedAt = null;
-    await this.todoRepository.save(todo);
+    // 递归获取子待办
+    const recursiveGetSub = async (todoId: string) => {
+      const subTodoList: SubTodo[] = await this.subTodoRepository.find({
+        where: { parentId: todoId },
+      });
+
+      for (let i = 0; i < subTodoList.length; i++) {
+        subTodoList[i].subTodoList = await recursiveGetSub(subTodoList[i].id);
+      }
+
+      return subTodoList;
+    };
+
+    todo.subTodoList = await recursiveGetSub(todo.id);
     return todo;
   }
 }

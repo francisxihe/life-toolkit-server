@@ -1,5 +1,6 @@
-import { Entity, Column } from "typeorm";
+import { Entity, Column, OneToMany } from "typeorm";
 import { BaseTodoEntity } from "./base.entity";
+import { SubTodo } from "./sub-todo.entity";
 
 @Entity("todo")
 export class Todo extends BaseTodoEntity {
@@ -14,4 +15,8 @@ export class Todo extends BaseTodoEntity {
   /** 待办重复间隔 */
   @Column({ nullable: true })
   repeatInterval: string;
+
+  /** 子待办 */
+  @OneToMany(() => SubTodo, (subTodo) => subTodo.parentId)
+  subTodoList?: SubTodo[];
 }
