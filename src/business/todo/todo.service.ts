@@ -117,7 +117,6 @@ export class TodoService extends BaseService<Todo> {
       filter.pageSize = 10;
     }
     const where = getWhere(filter);
-    where.parentId = IsNull();
     const [todoList, total] = await this.todoRepository.findAndCount({
       where,
       skip: (filter.pageNum - 1) * filter.pageSize,

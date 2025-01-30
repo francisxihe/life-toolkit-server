@@ -47,7 +47,4 @@ export class BaseTodoEntity extends BaseEntity {
   @Column("time", { nullable: true })
   planEndAt?: string;
 
-  /** 父待办id */
-  @Column({ nullable: true })
-  parentId?: string;
 }

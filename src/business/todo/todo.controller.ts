@@ -23,7 +23,7 @@ export class TodoController {
   ) {}
 
   /** 批量完成todo */
-  @Put("batchDone")
+  @Put("batch-done")
   @Response()
   batchDone(@Body() idList: string[]) {
     return this.todoStatusService.batchDone(idList);
@@ -44,7 +44,7 @@ export class TodoController {
   }
 
   /** 获取todo及其子todo */
-  @Get("todoWithSub/:id")
+  @Get("todo-with-sub/:id")
   @Response()
   todoWithSub(@Param("id") id: string) {
     return this.todoService.todoWithSub(id);
@@ -58,7 +58,6 @@ export class TodoController {
   @Post("create")
   @Response()
   create(@Body() createTodoDto: CreateTodoDto) {
-    console.log("===", createTodoDto);
     return this.todoService.create(createTodoDto);
   }
 
