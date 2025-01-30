@@ -15,6 +15,9 @@ import { TodoPageFilterDto } from "./dto/todo-page-filter.dto";
 import { TodoListFilterDto } from "./dto/todo-list-filter.dto";
 import { Response } from "@/decorators/response.decorator";
 import { TodoStatusService } from "./todo-status.service";
+import { ApiTags, ApiOperation, ApiParam, ApiBody } from "@nestjs/swagger";
+
+@ApiTags('待办事项')
 @Controller("todo")
 export class TodoController {
   constructor(
@@ -22,28 +25,35 @@ export class TodoController {
     private readonly todoStatusService: TodoStatusService
   ) {}
 
-  /** 批量完成todo */
+  @ApiOperation({ summary: '批量完成待办事项' })
+  @ApiBody({ 
+    description: '待办事项ID列表',
+    type: [String]
+  })
   @Put("batch-done")
   @Response()
   batchDone(@Body() idList: string[]) {
     return this.todoStatusService.batchDone(idList);
   }
 
-  /** 放弃todo */
+  @ApiOperation({ summary: '放弃待办事项' })
+  @ApiParam({ name: 'id', description: '待办事项ID' })
   @Put("abandon/:id")
   @Response()
   abandon(@Param("id") id: string) {
     return this.todoStatusService.abandon(id);
   }
 
-  /** 恢复todo */
+  @ApiOperation({ summary: '恢复待办事项' })
+  @ApiParam({ name: 'id', description: '待办事项ID' })
   @Put("restore/:id")
   @Response()
   restore(@Param("id") id: string) {
     return this.todoStatusService.restore(id);
   }
 
-  /** 获取todo及其子todo */
+  @ApiOperation({ summary: '获取待办事项及其子待办事项' })
+  @ApiParam({ name: 'id', description: '待办事项ID' })
   @Get("todo-with-sub/:id")
   @Response()
   todoWithSub(@Param("id") id: string) {
@@ -54,42 +64,47 @@ export class TodoController {
 
   // getSubTodoList
 
-  /** 创建todo */
+  @ApiOperation({ summary: '创建待办事项' })
+  @ApiBody({ type: CreateTodoDto })
   @Post("create")
   @Response()
   create(@Body() createTodoDto: CreateTodoDto) {
     return this.todoService.create(createTodoDto);
   }
 
-  /** 删除todo */
+  @ApiOperation({ summary: '删除待办事项' })
+  @ApiParam({ name: 'id', description: '待办事项ID' })
   @Delete("delete/:id")
   @Response()
   delete(@Param("id") id: string) {
     return this.todoService.delete(id);
   }
 
-  /** 更新todo */
+  @ApiOperation({ summary: '更新待办事项' })
+  @ApiParam({ name: 'id', description: '待办事项ID' })
+  @ApiBody({ type: UpdateTodoDto })
   @Put("update/:id")
   @Response()
   update(@Param("id") id: string, @Body() updateTodoDto: UpdateTodoDto) {
     return this.todoService.update(id, updateTodoDto);
   }
 
-  /** 获取todo列表 */
+  @ApiOperation({ summary: '分页获取待办事项列表' })
   @Get("page")
   @Response()
   page(@Query() filter: TodoPageFilterDto) {
     return this.todoService.page(filter);
   }
 
-  /** 获取todo列表 */
+  @ApiOperation({ summary: '获取待办事项列表' })
   @Get("list")
   @Response()
   list(@Query() filter: TodoListFilterDto) {
     return this.todoService.findAll(filter);
   }
 
-  /** 获取todo详情 */
+  @ApiOperation({ summary: '获取待办事项详情' })
+  @ApiParam({ name: 'id', description: '待办事项ID' })
   @Get("detail/:id")
   @Response()
   findById(@Param("id") id: string) {

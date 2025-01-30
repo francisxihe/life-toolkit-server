@@ -4,7 +4,7 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Todo } from "./entities/todo.entity";
 import { SubTodo } from "./entities/sub-todo.entity";
 import { TodoService } from "./todo.service";
-
+import { TodoStatus } from "./entities/todo.entity";
 @Injectable()
 export class TodoStatusService extends TodoService {
   constructor(
@@ -21,7 +21,7 @@ export class TodoStatusService extends TodoService {
       id: In(idList),
     });
     todoList.forEach((todo) => {
-      todo.status = "done";
+      todo.status = TodoStatus.DONE;
       todo.doneAt = new Date();
     });
     await this.todoRepository.save(todoList);
@@ -30,7 +30,7 @@ export class TodoStatusService extends TodoService {
 
   async abandon(id: string): Promise<Todo> {
     const todo = await this.findById(id);
-    todo.status = "abandoned";
+    todo.status = TodoStatus.ABANDONED;
     todo.abandonedAt = new Date();
     await this.todoRepository.save(todo);
     return todo;
@@ -38,7 +38,7 @@ export class TodoStatusService extends TodoService {
 
   async restore(id: string): Promise<Todo> {
     const todo = await this.findById(id);
-    todo.status = "todo";
+    todo.status = TodoStatus.TODO;
     todo.doneAt = null;
     todo.abandonedAt = null;
     await this.todoRepository.save(todo);

@@ -17,7 +17,7 @@ import { UpdateTodoDto } from "./dto/update-todo.dto";
 import { SubTodo } from "./entities/sub-todo.entity";
 import { BaseService } from "../../base/base.service";
 import { TodoPageFilterDto } from "./dto/todo-page-filter.dto";
-import { ResponseDto, PaginationResponseDto } from "../../helpers/response";
+import { TodoStatus } from "./entities/todo.entity";
 
 function getWhere(filter: TodoPageFilterDto) {
   const where: FindOptionsWhere<Todo> = {};
@@ -86,7 +86,7 @@ export class TodoService extends BaseService<Todo> {
   async create(createTodoDto: CreateTodoDto): Promise<Todo> {
     const todo = this.todoRepository.create({
       ...createTodoDto,
-      status: createTodoDto.status || "todo",
+      status: createTodoDto.status || TodoStatus.TODO,
       tags: createTodoDto.tags || [],
     });
     return this.todoRepository.save(todo);

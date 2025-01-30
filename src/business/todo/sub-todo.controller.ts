@@ -12,7 +12,9 @@ import { CreateSubTodoDto } from "./dto/create-sub-todo.dto";
 import { UpdateSubTodoDto } from "./dto/update-sub-todo.dto";
 import { TodoStatusService } from "./todo-status.service";
 import { Response } from "@/decorators/response.decorator";
+import { ApiTags } from "@nestjs/swagger";
 
+@ApiTags("子待办")
 @Controller("sub-todo")
 export class SubTodoController {
   constructor(
